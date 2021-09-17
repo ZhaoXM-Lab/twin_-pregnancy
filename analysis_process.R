@@ -1,4 +1,6 @@
 library(lme4)
+library(mediation)
+library(dplyr)
 # demographic characteristics statistic (disperse）#
 group_test_disperse<-function(untwins_data,twins_data,data){
   income_data_com$demo_comb_income_v2_l<-as.numeric(income_data_com$demo_comb_income_v2_l)
