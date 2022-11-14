@@ -1,6 +1,9 @@
 library(lme4)
 library(mediation)
 library(dplyr)
+library(compute.es)
+library(lmerTest)
+library(sjstats)
 # demographic characteristics statistic (disperse）#
 group_test_disperse<-function(untwins_data,twins_data,data){
   income_data_com$demo_comb_income_v2_l<-as.numeric(income_data_com$demo_comb_income_v2_l)
@@ -102,7 +105,6 @@ media_computer<-function(function_socre,structure_info){
 ## linear regression process
 compute_T_value<-function(data,untwins_data,twins_data,task_name,cog_cbcl){
   #data<-light_id
-  library(compute.es)
   # ,structure_feature,cog_index
   #data<-feature_info
   # data<-cbcl_socre_base
@@ -167,7 +169,6 @@ compute_T_value<-function(data,untwins_data,twins_data,task_name,cog_cbcl){
   group_diff<-c(rep(0,length(single_data)),rep(1,length(twins_data)))
   race_info<-c(single_race,twin_race)
   ####
-  #print(length(twins_data))
   name_cbcl<-colnames(data)
   sig_data<-vector()
   p_values_sig<-vector()
@@ -179,8 +180,6 @@ compute_T_value<-function(data,untwins_data,twins_data,task_name,cog_cbcl){
   ## 11:89
   save_list<-list()
   ##18:106
-  library(lmerTest)
-  library(sjstats)
   if(cog_cbcl=="CBCL"){
     start_n=10
     seq_dep=4
