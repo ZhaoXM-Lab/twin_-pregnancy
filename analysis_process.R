@@ -4,6 +4,7 @@ library(dplyr)
 library(compute.es)
 library(lmerTest)
 library(sjstats)
+library(lsr)
 # demographic characteristics statistic (disperse）#
 group_test_disperse<-function(untwins_data,twins_data,data){
   income_data_com$demo_comb_income_v2_l<-as.numeric(income_data_com$demo_comb_income_v2_l)
@@ -222,12 +223,12 @@ compute_T_value<-function(data,untwins_data,twins_data,task_name,cog_cbcl){
                          sex_var+age_var+age_var_father+BMI_var+ges_var+Puberty_var+adhd_prs+asd_prs+race_info
                          weight_var+educa_var+age_var_mother+mother_marijuana_var+MDD_prs+SCZ_prs+BIP_prs+
                          mother_morphine_var+mother_var_smo+mother_var_alcho+(1|site_info),data=glm_dataf)
-        pVal<-p_value(lin.mod)$p[2]
+        pVal<-summary(lin.mod)$coefficients[2,5]
         tVal<-summary(lin.mod)$coefficients[2,4]
         if(nrow(twins_data_us)>3){
           print(name_cbcl[i])
-          te_conhed<-tes(tVal, n.1=nrow(twins_data_us), n.2=nrow(single_data_us))
-          cohen_d<-c(cohen_d,te_conhed$d)
+          te_conhed<-cohensD(twins_data_us$cbcl_var_cat,single_data_us$cbcl_var_cat)
+          cohen_d<-c(cohen_d,te_conhed)
           sample_num<-c(sample_num,nrow(glm_dataf))
           single_mean_d<-c(single_mean_d,sinlle_mean_co)
           twins_mean_d<-c(twins_mean_d,twins_mean_co)
@@ -240,6 +241,5 @@ compute_T_value<-function(data,untwins_data,twins_data,task_name,cog_cbcl){
     }
     redata<-data.frame(name_cbcl[sig_data],twins_mean_d,single_mean_d,p_values_sig,t_value,cohen_d)
     redata$p_values_sig<-p.adjust(redata$p_values_sig,method = "fdr")
-  return(redata)
+    return(redata)
 }
-
